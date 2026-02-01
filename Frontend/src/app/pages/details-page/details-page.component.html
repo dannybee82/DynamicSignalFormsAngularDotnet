@@ -1,0 +1,9 @@
+@if(isLoaded()) {
+    <app-dynamic-signal-form [(formData)]="formData!" [(formModel)]="formModel!" (getData)="showData($event)"></app-dynamic-signal-form>
+} @else {
+    @if(this.hasError()) {
+        <p>Error: Unable to load Form.</p>
+    } @else {
+        <p>Loading...</p>
+    }    
+}

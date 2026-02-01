@@ -1,0 +1,163 @@
+@if(isLoaded()) {
+    <div class="row p-1">
+        <div class="column w-50 border-1 p-1 me-1">
+            <h3>{{ isUpdateMode() ? 'Update Form' : 'Create Form' }}</h3>
+            <div class="row">
+                <form (submit)="submit($event)">
+                    <div class="column">
+                        <mat-form-field>
+                            <mat-select [formField]="signalForm.formType">
+                                @for(option of formTypeOptions; track $index) {
+                                    <mat-option [value]="option">{{ option }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Title</mat-label>
+                            <input matInput type="text" [formField]="signalForm.title">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>CSS classes</mat-label>
+                            <input matInput type="text" [formField]="signalForm.cssClasses">
+                        </mat-form-field>
+                        <div class="row">
+                            <button type="submit" mat-raised-button color="primary">
+                                <mat-icon>arrow_right</mat-icon>
+                                <span>{{ isUpdateMode() ? 'Update' : 'Create' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h3>Fields:</h3>
+            @for(field of formModel().formFields; track $index; let index = $index) {
+            <div class="row fx-space-between mb-1 w-75">
+                <div class="column w-25 pt-1">
+                    {{ field.label }}
+                </div>
+                <div class="column pt-1">
+                    {{ field.inputType }}
+                </div>
+                <div class="column">
+                    <button type="button" mat-raised-button color="accent" (click)="editField(field)">
+                        <mat-icon>edit</mat-icon>
+                        Edit Field
+                    </button>
+                </div>
+                <div class="column">
+                    <button type="button" mat-raised-button color="primary" (click)="deleteField(index)">
+                        <mat-icon>delete</mat-icon>
+                        Delete field
+                    </button>
+                </div>
+            </div>
+            }
+            <h3>Available inputs:</h3>
+            <div class="button-grid w-75">
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_TEXT)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Input Text</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_TEXT_AUTOCOMPLETE)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Autocomplete Input</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_NUMBER_INT)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Input number (int)</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_NUMBER_FLOAT)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Input number (float)</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_DATE)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Date Picker</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_SELECT)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Select (single)</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_SELECT_MULTI)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Select (multi)</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().INPUT_TEXTAREA)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Textarea</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().RADIO_BUTTON_GROUP)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Radiobutton Group</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().CHECKBOX)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Checkbox</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().SLIDE_TOGGLE)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Slide Toggle</span>
+                </button>
+                <button type="button" class="mb-1" mat-raised-button color="accent" (click)="showForm(getEnum().FORM_ARRAY)">
+                    <mat-icon>add</mat-icon>
+                    <span>Add Form Array</span>
+                </button>
+            </div>
+        </div>
+        <div class="column w-50 border-1 p-1">
+            @if(showFieldForm() === getEnum().INPUT_TEXT ||
+            showFieldForm() === getEnum().INPUT_DATE) {
+                <app-create-input 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />
+            }
+            @if(showFieldForm() === getEnum().INPUT_TEXT_AUTOCOMPLETE ||
+            showFieldForm() === getEnum().INPUT_SELECT ||
+            showFieldForm() === getEnum().INPUT_SELECT_MULTI ||
+            showFieldForm() === getEnum().RADIO_BUTTON_GROUP) {
+                <app-create-input-with-options 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />
+            }
+            @if(showFieldForm() === getEnum().INPUT_NUMBER_INT) {
+                <app-create-input-int 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />
+            }
+            @if(showFieldForm() === getEnum().INPUT_NUMBER_FLOAT) {
+                <app-create-input-float 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)"
+                />
+            }
+            @if(showFieldForm() === getEnum().INPUT_TEXTAREA) {
+                <app-create-textarea 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />
+            }
+            @if(showFieldForm() === getEnum().CHECKBOX || showFieldForm() === getEnum().SLIDE_TOGGLE) {
+                <app-create-input-boolean 
+                    [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />
+            }
+            @if(showFieldForm() === getEnum().FORM_ARRAY) {
+                <app-create-form-array
+                     [signalFormField]="selectedField()" 
+                    [formType]="showFieldForm()"
+                    (data)="addOrUpdateFormField($event)" 
+                />            
+            }
+        </div>
+    </div>
+}

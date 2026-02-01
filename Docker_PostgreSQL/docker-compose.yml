@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  postgresql_dynamic_signal_forms:
+    image: postgres:16.4
+    container_name: postgresql_dynamic_signal_forms
+    restart: unless-stopped
+    environment:      
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Test2026!
+      - POSTGRES_DB=DynamicSignalForms
+    ports: 
+      - "5432:5432"

@@ -1,0 +1,59 @@
+<div class="column">
+    <h3>Additional Data</h3>
+    @if(additionalData().length > 0) {
+        @for(data of additionalData(); track $index; let index = $index) {
+            <div class="row fx-space-between mb-1 w-75">
+                <div class="column pt-1">
+                   {{ data.attribute }}
+                </div>
+                <div class="column pt-1">
+                    {{ data.attributeType }}
+                </div>
+                <div class="column">
+                    {{ data.value }}
+                </div>
+                <div class="column">
+                    <button type="button" mat-raised-button color="warn" (click)="removeData(index)">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Remove Data</span>
+                    </button>
+                </div>
+            </div>
+        }                
+    } @else {
+        <p>There are no Validators added yet.</p>
+    }
+    <div class="row">
+        <form (submit)="submit($event)">
+            <div class="column">
+                <div class="row">
+                    <mat-form-field>
+                        <mat-label>Attribute</mat-label>
+                        <input matInput type="text" [formField]="form.attribute">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field>
+                        <mat-label>Value</mat-label>
+                        <input matInput type="text" [formField]="form.value">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field>
+                        <mat-select [formField]="form.attributeType">
+                            @for(option of allowedAttributeTypes; track $index) {
+                                <mat-option [value]="option">{{ option }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <button type="submit" mat-raised-button color="primary">
+                        <mat-icon>arrow_right</mat-icon>
+                        <span>Add Data</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

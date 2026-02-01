@@ -1,0 +1,93 @@
+<div class="column w-75">
+    <h3>Current Validators</h3>
+    @if(validations().length > 0) {
+        @for(validator of validations(); track $index; let index = $index) {
+            <div class="row fx-space-between mb-1 w-100">
+                <div class="column pt-1">
+                   {{ validator.validation }}
+                </div>
+                <div class="column">
+                    {{ validator.value }}
+                </div>
+                <div class="column">
+                    <button type="button" mat-raised-button color="warn" (click)="removeValidator(index)">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Delete Validator</span>
+                    </button>
+                </div>
+            </div>
+        }                
+    } @else {
+        <p>There are no Validators added yet.</p>
+    }
+    <div class="row">
+        <form>
+            <mat-form-field>
+                <mat-label>Validator Type</mat-label>
+                <mat-select [formField]="selectedValidator.selection">
+                @for(option of availableValidations(); track $index) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                }
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
+    <div class="row">
+        @if(selectedValidator.selection().controlValue() === getEnum().REQUIRED) {
+            <button type="button" mat-raised-button color="accent" (click)="addRequiredValidator()">
+                Add Required Validator
+            </button>
+        }
+        @if(selectedValidator.selection().controlValue() !== getEnum().UNKNOWN && selectedValidator.selection().controlValue() !== getEnum().REQUIRED) {
+            <form (submit)="addValidator($event)">
+                <div class="column">
+                    <h3>{{ selectedValidator.selection().controlValue() }}</h3>
+                    <div class="row">
+                        <mat-form-field>
+                            @if(selectedValidator.selection().controlValue() !== this.getEnum().DATE_NOT_EQUAL && 
+                                selectedValidator.selection().controlValue() !== this.getEnum().DATE_MUST_BE_EARLIER &&
+                                selectedValidator.selection().controlValue() !== this.getEnum().DATE_MUST_BE_LATER) {
+                                <mat-label>Value</mat-label>
+                            } @else {
+                                <mat-label>Target Field</mat-label>
+                            }                        
+                            @if(selectedValidator.selection().controlValue() === this.getEnum().MIN_LENGTH || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MAX_LENGTH || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_VALUE_INT ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_VALUE_INT || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_TIME_DAYS ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_TIME_DAYS ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_TIME_WEEKS ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_TIME_WEEKS ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_TIME_MONTHS || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_TIME_MONTHS || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_TIME_YEARS || 
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_TIME_YEARS) {
+                                <input type="number" matInput [formField]="validationForm.value">
+                            }
+                            @if(selectedValidator.selection().controlValue() === this.getEnum().PATTERN) {
+                                <input type="text" matInput [formField]="validationForm.value">
+                            } 
+                            @if(selectedValidator.selection().controlValue() === this.getEnum().MINIMUM_VALUE_FLOAT ||
+                                selectedValidator.selection().controlValue() === this.getEnum().MAXIMUM_VALUE_FLOAT) {
+                                <input type="number" matInput [formField]="validationForm.value" step=".01">
+                            }
+                            @if(selectedValidator.selection().controlValue() === this.getEnum().DATE_NOT_EQUAL || 
+                                selectedValidator.selection().controlValue() === this.getEnum().DATE_MUST_BE_EARLIER ||
+                                selectedValidator.selection().controlValue() === this.getEnum().DATE_MUST_BE_LATER) {
+                                <input type="text" matInput [formField]="validationForm.value">
+                            }                      
+                        </mat-form-field>
+                    </div>
+                    
+                </div>   
+                <div class="row">
+                    <button type="submit" mat-raised-button color="primary">
+                        <mat-icon>arrow_right</mat-icon>
+                        <span>Add Validator</span>
+                    </button>
+                </div>             
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@if(isLoaded()) {
+    <form (submit)="submit($event)">
+        <div class="col w-50">
+            <h3>{{ isUpdateMode() ? 'Update ' : 'Create ' }} {{ formType() }}</h3>
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>Property</mat-label>
+                    <input type="text" matInput [formField]="inputForm.property">
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field>
+                    <mat-label>CSS Classes</mat-label>
+                    <input type="text" matInput [formField]="inputForm.cssClasses">
+                </mat-form-field>
+            </div> 
+            @if(formArrayIdSelected() > 0) {
+                <div class="row">
+                    <p><strong>Form Array Selected:</strong> {{ this.formArrayIdSelected() }}</p>
+                </div>
+            }
+            <div class="row">
+                <div class="column">
+                    <h3>Available Form Arrays:</h3>
+                    @if(availableOptions().length > 0) {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Id</th>
+                                    <th>Title</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(formArray of availableOptions(); track formArray.id) {
+                                    <tr>
+                                        <td>
+                                            <button type="button" mat-icon-button color="primary" (click)="selectFormArray(formArray.id)">
+                                                <mat-icon>arrow_right</mat-icon>
+                                            </button>
+                                        </td>
+                                        <td>{{ formArray.id }}</td>
+                                        <td>{{ formArray.title }}</td>                                        
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    } @else {
+                        <p>There are no Form Arrays available</p>
+                    }
+                </div>
+            </div>  
+            <div class="row">
+                <button type="submit" mat-raised-button color="primary" [disabled]="!formArrayIdSelected()">
+                    <mat-icon>arrow_right</mat-icon>
+                    <span>{{ this.isUpdateMode() ? 'Update Input' : 'Create Input' }}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+}

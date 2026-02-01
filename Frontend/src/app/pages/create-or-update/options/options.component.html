@@ -1,0 +1,58 @@
+<div class="column w-75">
+    <h3>Current Options</h3>
+    @if(options().length > 0) {
+        @for(option of options(); track $index; let index = $index) {
+            <div class="row mb-1">
+                <div class="column pt-half me-1">
+                    {{ option.label }}
+                </div>
+                @if(formType() === this.getEnum().CHECKBOX ||
+                    formType() === this.getEnum().RADIO_BUTTON_GROUP ||
+                    formType() === this.getEnum().SLIDE_TOGGLE) {
+                    <div class="column">
+                        {{ option.value }}
+                    </div>
+                    <div class="column">
+                        {{ option.typeOfValue }}
+                    </div>
+                }    
+                <div class="column">
+                    <button type="button" mat-raised-button color="warn" (click)="removeOption(index)">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Remove option</span>
+                    </button>
+                </div>            
+            </div>
+        }
+    } @else {
+        <p>No options available</p>
+    }
+    <form (submit)="submit($event)">
+        <div class="column w-50">
+            <mat-form-field>
+                <mat-label>Label</mat-label>
+                <input type="text" matInput [formField]="form.label">
+            </mat-form-field>        
+            @if(formType() === this.getEnum().RADIO_BUTTON_GROUP) {
+                <mat-form-field>
+                    <mat-label>Value</mat-label>
+                    <input type="text" matInput [formField]="form.value">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Option Type</mat-label>
+                    <mat-select [formField]="form.typeOfValue">
+                        @for(type of availableTypes; track $index) {
+                            <mat-option [value]="type">{{ type }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            }
+            <div class="row">
+                <button type="submit" mat-raised-button color="primary">
+                    <mat-icon>plus</mat-icon>
+                    <span>Add Option</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

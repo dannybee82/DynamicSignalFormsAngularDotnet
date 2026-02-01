@@ -1,0 +1,48 @@
+<form (submit)="submit($event)">
+    <div class="col w-50">
+        <h3>{{ isUpdateMode() ? 'Update ' : 'Create ' }} {{ formType() }}</h3>
+        <div class="row">
+            @if(allowedInputTypes().length > 0) {
+                <mat-form-field>
+                <mat-label>Input Type</mat-label>
+                <mat-select [formField]="inputForm.inputType">
+                    @for(option of allowedInputTypes(); track $index) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                    }
+                </mat-select>
+                </mat-form-field>
+            }
+        </div>
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Label</mat-label>
+                <input type="text" matInput [formField]="inputForm.label">
+            </mat-form-field>
+        </div>
+        <div class="row">
+             <mat-form-field>
+                <mat-label>Property</mat-label>
+                <input type="text" matInput [formField]="inputForm.property">
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Initial Value</mat-label>
+                <input type="number" matInput [formField]="inputForm.initialValue" step=".01">
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field>
+                <mat-label>CSS Classes</mat-label>
+                <input type="text" matInput [formField]="inputForm.cssClasses">
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <button type="submit" mat-raised-button color="primary">
+                <mat-icon>arrow_right</mat-icon>
+                <span>{{ this.isUpdateMode() ? 'Update Input' : 'Create Input' }}</span>
+            </button>
+        </div>
+    </div>
+</form>
+<app-validations [(validations)]="inputForm().value().validations" [formType]="formType()"></app-validations>

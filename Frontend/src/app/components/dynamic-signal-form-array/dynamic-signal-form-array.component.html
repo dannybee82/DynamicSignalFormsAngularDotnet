@@ -1,0 +1,265 @@
+@if(formModel() && formData()) {
+    <div class="row mb-1">
+        <div class="column">
+            <button type="button" mat-raised-button color="primary" (click)="addItem()">
+                <mat-icon>add</mat-icon>
+                Add Item
+            </button>
+        </div>
+    </div>
+    <form>        
+            @for(arrItem of form.formArray; track i; let i = $index) {
+                <div [class]="formData()!.cssClasses">
+                    <div class="row pt-half">
+                        <button type="button" mat-icon-button (click)="swapItem(i, false)">
+                            <mat-icon>arrow_upwards</mat-icon>
+                        </button>
+                        <button type="button" mat-icon-button (click)="swapItem(i, true)">
+                            <mat-icon>arrow_downwards</mat-icon>
+                        </button>
+                    </div>
+                @for(field of formData()!.formFields; track $index) {
+                    <div [class]="field.cssClasses">
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXT) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="text" matInput [formField]="getField(i, field.property)">
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXT_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="text" matInput [formField]="getField(i, field.property)">
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXT_AUTOCOMPLETE) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="text" matInput [formField]="getField(i, field.property)" [matAutocomplete]="auto"
+                                    #inputAutocomplete>
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    @for (option of getFilteredOptions(field.property, inputAutocomplete.value); track $index) {
+                                    <mat-option [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXT_AUTOCOMPLETE_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="text" matInput [formField]="getField(i, field.property)" [matAutocomplete]="auto"
+                                    #inputAutocomplete>
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    @for (option of getFilteredOptions(field.property, inputAutocomplete.value); track $index) {
+                                    <mat-option [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_NUMBER_INT) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="number" matInput [formField]="getField(i, field.property)" step="1">
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_NUMBER_INT_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="number" matInput [formField]="getField(i, field.property)" step="1">
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_NUMBER_FLOAT) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="number" matInput [formField]="getField(i, field.property)" step=".01">
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_NUMBER_FLOAT_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input type="number" matInput [formField]="getField(i, field.property)" step=".01">
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_DATE) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input matInput [matDatepicker]="picker" [formField]="getField(i, field.property)">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker startView="year"></mat-datepicker>
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_DATE_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input matInput [matDatepicker]="picker" [formField]="getField(i, field.property)">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker startView="year"></mat-datepicker>
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_SELECT) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <mat-select [formField]="getField(i, field.property)">
+                                    @for (option of getOptions(field.property); track $index) {
+                                    <mat-option [value]="option">{{option}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_SELECT_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <mat-select [formField]="getField(i, field.property)">
+                                    @for (option of getOptions(field.property); track $index) {
+                                    <mat-option [value]="option">{{option}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_SELECT_MULTI) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <mat-select [formField]="getField(i, field.property)" multiple>
+                                    @for (option of getOptions(field.property); track $index) {
+                                    <mat-option [value]="option">{{option}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_SELECT_MULTI_CALLBACK) {
+                            <mat-form-field>
+                                <mat-label>{{ field.label }}</mat-label>
+                                <mat-select [formField]="getField(i, field.property)" multiple>
+                                    @for (option of getOptions(field.property); track $index) {
+                                    <mat-option [value]="option">{{option}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXTAREA) {
+                            <mat-form-field>
+                                <textarea [rows]="getAttribute(field.property, 'rows')" [cols]="getAttribute(field.property, 'cols')"
+                                    matInput [placeholder]="field.label" [formField]="getField(i, field.property)">
+                                            </textarea>
+                            </mat-form-field>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().INPUT_TEXTAREA_CALLBACK) {
+                        <mat-form-field>
+                                <textarea [rows]="getAttribute(field.property, 'rows')" [cols]="getAttribute(field.property, 'cols')"
+                                    matInput [placeholder]="field.label" [formField]="getField(i, field.property)">
+                                            </textarea>
+                            </mat-form-field>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().RADIO_BUTTON_GROUP) {
+                            <h3>{{ field.label }}</h3>
+                            <mat-radio-group [aria-label]="field.label" [formField]="getField(i, field.property)">
+                                <div [class]="field.cssClasses">
+                                    @for(option of getKeyValuePairs(field.property); track $index) {
+                                    <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+                                    }
+                                </div>
+                            </mat-radio-group>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().RADIO_BUTTON_GROUP_CALLBACK) {
+                            <h3>{{ field.label }}</h3>
+                            <mat-radio-group [aria-label]="field.label" [formField]="getField(i, field.property)">
+                                <div [class]="field.cssClasses">
+                                    @for(option of getKeyValuePairs(field.property); track $index) {
+                                    <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+                                    }
+                                </div>
+                            </mat-radio-group>
+                            <div class="row callback-data g-1">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong>{{getValue(field.property)}}
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().CHECKBOX) {
+                            <mat-checkbox [formField]="getField(i, field.property)">{{ field.label }}</mat-checkbox>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().CHECKBOX_CALLBACK) {
+                            <mat-checkbox [formField]="getField(i, field.property)">{{ field.label }}</mat-checkbox>
+                            <div class="row callback-data g-1 align-text-and-icon">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong><mat-icon>check</mat-icon>
+                                }
+                            </div>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().SLIDE_TOGGLE) {
+                            <mat-slide-toggle [formField]="getField(i, field.property)">{{ field.label }}</mat-slide-toggle>
+                        }
+                        @if(field.inputType === getfieldTypeEnum().SLIDE_TOGGLE_CALLBACK) {
+                            <mat-slide-toggle [formField]="getField(i, field.property)">{{ field.label }}</mat-slide-toggle>
+                            <div class="row callback-data g-1 align-text-and-icon">
+                                @let value = getValue(field.property);
+                                @if(value) {
+                                <strong>{{ field.label }}: </strong><mat-icon>check</mat-icon>
+                                }
+                            </div>
+                        }
+                    </div>                    
+                }
+                <div class="column pt-half ms-1">
+                        <button type="button" mat-icon-button color="warn" (click)="removeItem(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            }        
+    </form>
+}
